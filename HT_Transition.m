@@ -20,7 +20,7 @@ else
 end
 steps=Smooth(1:n,a);
 temp1=[];
-[K,J]=size(Objects);
+[K,J]=size(Object);
 for k=1:K
     temp2=[];
     for j=1:J
