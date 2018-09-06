@@ -6,7 +6,7 @@ function Object=HT_Feedback(Object)
 %   Outputs:
 %       Object: Updated Object.
 
-% © 2018 Hanif Tiznobake
+% ï¿½ 2018 Hanif Tiznobake
 
 if isnumeric(Object)
     temp=Object;
@@ -29,4 +29,4 @@ if isnumeric(Object)
     Object=temp2;
 else
     Object.CData=temp2;
-end
+end %gdgfefd
