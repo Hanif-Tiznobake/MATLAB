@@ -47,7 +47,8 @@ switch task
                 handles.Graphics.Color,true);
             handles.Graphics.Watermark=...
                 HT_Transition(handles.Graphics.Watermark,{'YLim'},...
-                [1-handles.Graphics.Watermark.Position(4),0],frames);
+                [1-handles.Graphics.Watermark.Position(4),0],...
+                frames,handles);
             handles=Wait(handles,'off',frames);
         else
             handles=SetAxis(handles,initialize);
@@ -88,7 +89,8 @@ switch task
         else
             handles.Graphics.Watermark=...
                 HT_Transition(handles.Graphics.Watermark,{'YLim'},...
-                [1-handles.Graphics.Watermark.Position(4),0],frames);
+                [1-handles.Graphics.Watermark.Position(4),0],...
+                frames,handles);
         end
     case 'Toolbar'
         handles=SetToolbar(handles);
@@ -121,12 +123,12 @@ switch state
         handles.Graphics.Credits.Visible='on';
         h=HT_Transition(h,{'XLim','YLim'},...
             [round([1,h(1).Position(3),1,...
-            h(1).Position(4)])],frames);
+            h(1).Position(4)])],frames,handles);
         handles.Graphics.Watermark=h(1);
     case 'off'
         h=HT_Transition(h,{'XLim','YLim'},...
             round([h(1).Position(3)/2+[-20,-18],...
-            h(1).Position(4)/2+[18,20]]),frames);
+            h(1).Position(4)/2+[18,20]]),frames,handles);
         handles.Graphics.Watermark=h(1);
         handles.Graphics.Credits.Visible='off';
         handles=Lock(handles,'off');
@@ -369,7 +371,7 @@ Object=[handles.Graphics.Axis(1,active)',handles.Graphics.Axis(1,active)',...
     handles.Graphics.Axis(2,active)',handles.Graphics.Patch(1,active,1)'];
 Prop={'XLim','YLim','XLim','FaceAlpha'};
 
-HT_Transition(Object,Prop,Trans,frames);
+HT_Transition(Object,Prop,Trans,frames,handles);
 for k=active
     if ~flag && ~ismember(handles.UserData.ZoomMode,[2,3])
         set(handles.Graphics.Patch(1,k,1),...
@@ -596,8 +598,7 @@ for l=1:size(Path,1)
             j=j+1;
         end
     end
-    drawnow
-    %     handles=HT_Record(handles,'all');
+    drawnow;
 end
 for i=activeAxes
     set([handles.Graphics.Axis(i,activeMics);...

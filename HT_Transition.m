@@ -1,4 +1,4 @@
-function Object=HT_Transition(Object,Prop,Target,frames)
+function Object=HT_Transition(Object,Prop,Target,frames,varargin)
 %HT_Transition Applies transitions on m in graphic objects.
 
 %   Inputs:
@@ -10,6 +10,9 @@ function Object=HT_Transition(Object,Prop,Target,frames)
 
 % © 2018 Hanif Tiznobake
 
+if nargin>4
+    handles=varargin{1};
+end
 n=frames-1;
 if n>1
     a=[1,1,1;n^2,n,1;n*(n+1)*(2*n+1)/6,n*(n+1)/2,n]\[0.1;0.1;n];
@@ -45,7 +48,19 @@ for i=1:size(path,1)
         l=l+s;
     end
     drawnow
-    %     handles=HT_Record(handles,'all');
+    if nargin>4
+        Record(handles,'all');
+    end
+end
+end
+
+function Record(handles,mode)
+if strcmp(handles.Capture.State,'on') && ~strcmp(mode,'none')
+    h=copyobj(handles.Panel,handles.UserData.HiddenFig);
+    set([h;h.Children],'Units','normalized')
+    set(h,'Position','default');
+    writeVideo(handles.UserData.Video,getframe(handles.UserData.HiddenFig));
+    delete(handles.UserData.HiddenFig.Children);
 end
 end
 
