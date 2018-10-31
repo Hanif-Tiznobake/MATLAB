@@ -38,6 +38,7 @@ for j=1:size(path,2)
         path(:,j,k)=(Target(1,j,k)+steps*(Target(2,j,k)-Target(1,j,k))/n)';
     end
 end
+s=0;
 for i=1:size(path,1)
     l=1;
     for j=1:length(Prop)
