@@ -181,36 +181,56 @@ switch handles.One_Pop.Value
     case 1
         set(handles.Two.Children,'Enable','off');
         handles.One_List.String='';
-        handles.Two_List.String='';
     case 2
         set(handles.Two.Children,'Enable','on');
-        handles.One_List.String=HT_DataAccess(handles,'query','ID');
+        handles.One_List.String=HT_DataAccess(handles,'query',...
+            ['SELECT DISTINCT [DateTime] ',...
+             'FROM Recordings'],'cellarray');
 end
 switch handles.Two_Pop.Value
     case 1
         set(handles.Two.Children(2:end),'Enable','off');
         handles.Two_List.String='';
-    case {2,3}
+    case 2
         set(handles.Two.Children,'Enable','on');
         handles.Two_List.String=cell(size(handles.Two_Pop.UserData...
             {handles.Two_Pop.Value,2},1),1);
         for i=1:size(handles.Two_Pop.UserData{handles.Two_Pop.Value,2},1)
             switch class(handles.Two_Pop.UserData{...
+                    handles.Two_Pop.Value,2}{i,1})
+                case {'char','string'}
+                    format1='%s';
+                case {'uint64','logical'}
+                    format1='%d';
+                case 'double'
+                    format1='%0.3f';
+            end
+            switch class(handles.Two_Pop.UserData{...
                     handles.Two_Pop.Value,2}{i,2})
                 case {'char','string'}
-                    format='%s';
-                case 'logical'
-                    format='%d';
+                    format2='%s';
+                case {'uint64','logical'}
+                    format2='%d';
                 case 'double'
-                    format='%0.3f';
-            end
+                    format2='%0.3f';
+            end            
             handles.Two_List.String{i}=...
-                sprintf(['%s: ',format],...
+                sprintf([format1,': ',format2],...
                 handles.Two_Pop.UserData{handles.Two_Pop.Value,2}{i,1},...
                 handles.Two_Pop.UserData{handles.Two_Pop.Value,2}{i,2});
         end
+    case 3
+        set(handles.Two.Children(2:end),'Enable','on');
+        Mics=handles.Two_Pop.UserData{2,2};
+        handles.Two_Pop.UserData{3,2} = HT_DataAccess(handles,'query',...
+            ['SELECT [ID], [Start Time] ',...
+             'FROM Annotations ',...
+             'WHERE [DateTime] = #', handles.Data.Date,'# ',...
+             'AND [Channel ID] IN (',sprintf('%d, ',Mics{[Mics{:,2}],1}),')'],'cellarray');
+        temp=string(handles.Two_Pop.UserData{handles.Two_Pop.Value,2});
+        handles.Two_List.String = temp(:,2);        
 end
-if handles.Two_Pop.Value>1
+if handles.Two_Pop.Value==2
     switch class(handles.Two_Pop.UserData{handles.Two_Pop.Value,2}...
             {handles.Two_List.Value,2})
         case 'double'
@@ -223,7 +243,7 @@ if handles.Two_Pop.Value>1
             handles.Two_Slide.Visible='off';
     end
 end
-handles.Data.Name=char(handles.One_List.String(handles.One_List.Value));
+handles.Data.Date=char(handles.One_List.String(handles.One_List.Value));
 end
 
 function handles=Set34(handles,initialize)
