@@ -3,36 +3,37 @@ classdef HT_Axis < axes
     %   Detailed explanation goes here
     
     properties
-        graphs
         count
+        graphs
+        props
     end
     
     methods
-        function obj = HT_Axis(panel, props, graphs)
+        function obj = HT_Axis(panel, state)
             %UNTITLED Construct an instance of this class
             %   Detailed explanation goes here
             obj = obj@axes(panel,'Box','on');
             set(obj,'NextPlot','add');
-            obj.count=size(graphs,1);
+            obj.count=size(state.graphs,1);
             for i = 1:obj.count
-                switch lower(graphs{i,1})
+                switch lower(state.graphs{i,1})
                     case 'plot'
-                        obj.graphs(i) = plot(axis,NaN(1,2),NaN(1,2));
+                        obj.graphs(i) = plot(axis);
                     case 'scatter'
-                        obj.graphs(i) = scatter(axis,NaN(1,2),NaN(1,2));
+                        obj.graphs(i) = scatter(axis);
                     case 'surf'
-                        obj.graphs(i) = surf(axis,NaN(1,2),NaN(1,2),NaN(2,2));
+                        obj.graphs(i) = surf(axis);
                     case 'patch'
-                        obj.graphs(i) = fill(axis,NaN,NaN);
+                        obj.graphs(i) = fill(axis);
                     case 'line'
-                        obj.graphs(i) = line(axis,NaN(1,2),NaN(1,2),NaN(1,2));
+                        obj.graphs(i) = line(axis);
                 end
-                for j=1:size(graphs{i,2},1)
-                    set(obj.graphs(i),graphs{i,2}{j,1},graphs{i,2}{j,2});
+                for j=1:size(state.graphs{i,2},1)
+                    set(obj.graphs(i),state.graphs{i,2}{j,1},state.graphs{i,2}{j,2});
                 end
             end
-            for i =1:size(props,1)
-                set(obj,props{i,2}{j,1},props{i,2}{j,2});
+            for i =1:size(state.properties,1)
+                set(obj,state.properties{i,2}{j,1},state.properties{i,2}{j,2});
             end
             set(obj,'NextPlot','replacechildren');
         end
