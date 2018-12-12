@@ -1,110 +1,51 @@
-classdef HT_Graph
+classdef HT_Axis < axes
     %UNTITLED Summary of this class goes here
     %   Detailed explanation goes here
     
     properties
-        Plot
-        Scatter
-        Surf
-        Patch
-        Line
-        Visible
+        graphs
+        count
     end
     
     methods
-        function obj = HT_Graph(axis,varargin)
+        function obj = HT_Axis(panel, props, graphs)
             %UNTITLED Construct an instance of this class
             %   Detailed explanation goes here
-            obj.Plot(1)=...
-                plot(obj.Axis(k),NaN(1,2),NaN(1,2));
-            obj.Plot(2)=...
-                plot(obj.Axis(k),NaN(1,2),NaN(1,2),...
-                'Color','r','LineWidth',1);
-            obj.Scatter(1)=...
-                scatter(obj.Axis(k),NaN(1,2),NaN(1,2),'s');
-            obj.Scatter(2)=...
-                scatter(obj.Axis(k),NaN(1,2),NaN(1,2),...
-                'MarkerFaceColor','r');
-            obj.Surf(1)=...
-                surf(obj.Axis(k),NaN(1,2),NaN(1,2),NaN(2,2),...
-                'EdgeColor','none');
-            obj.Surf(2)=...
-                surf(obj.Axis(k),NaN(1,2),NaN(1,2),NaN(2,2),...
-                'EdgeColor','none','FaceColor','interp','FaceAlpha','interp');
-            obj.Surf(3)=...
-                surf(obj.Axis(k),NaN(1,2),NaN(1,2),NaN(2,2),...
-                'EdgeColor','none','FaceColor','interp','FaceAlpha','interp');
-            obj.Patch(1)=...
-                fill(obj.Axis(k),NaN,NaN,'k',...
-                'FaceAlpha',0.1,'EdgeAlpha',1);
-            obj.Line(1)=...
-                line(obj.Axis(k),NaN(1,2),NaN(1,2),NaN(1,2),...
-                'LineWidth',1,'Visible','off');            
+            obj = obj@axes(panel,'Box','on');
+            set(obj,'NextPlot','add');
+            obj.count=size(graphs,1);
+            for i = 1:obj.count
+                switch lower(graphs{i,1})
+                    case 'plot'
+                        obj.graphs(i) = plot(axis,NaN(1,2),NaN(1,2));
+                    case 'scatter'
+                        obj.graphs(i) = scatter(axis,NaN(1,2),NaN(1,2));
+                    case 'surf'
+                        obj.graphs(i) = surf(axis,NaN(1,2),NaN(1,2),NaN(2,2));
+                    case 'patch'
+                        obj.graphs(i) = fill(axis,NaN,NaN);
+                    case 'line'
+                        obj.graphs(i) = line(axis,NaN(1,2),NaN(1,2),NaN(1,2));
+                end
+                for j=1:size(graphs{i,2},1)
+                    set(obj.graphs(i),graphs{i,2}{j,1},graphs{i,2}{j,2});
+                end
+            end
+            for i =1:size(props,1)
+                set(obj,props{i,2}{j,1},props{i,2}{j,2});
+            end
+            set(obj,'NextPlot','replacechildren');
         end
+         
         
-        function outputArg = method1(obj,inputArg)
+        function clear(obj)
             %METHOD1 Summary of this method goes here
             %   Detailed explanation goes here
-            outputArg = obj.Property1 + inputArg;
+            for i = 1:obj.count
+                set(obj.graphs(i),  'XData',NaN(size(obj.graphs(i).XData)),...
+                                    'YData',NaN(size(obj.graphs(i).YData)),...
+                                    'ZData',NaN(size(obj.graphs(i).ZData)));
+            end
         end
     end
-end
-
-function handles = SetAxis(app, handles, initialize)
-if initialize
-    delete(Panel.Children);
-    for k=1:size(Two_Pop.UserData{2,2},1)
-        Graphics.Axis(1,k)=axes(Panel,'Box','on');
-        Graphics.Axis(2,k)=axes(Panel,'Box','on');
-        Graphics.Axis(3,k)=axes(Panel,'Box','on');
-        Graphics.Watermark=axes(Panel,'Color','none','XColor',...
-            'none','YColor','none',...
-            'XTick',[],'YTick',[],'Units','pixels','NextPlot','add');
-        set(Graphics.Axis(:),'NextPlot','add');
-        for i=1:size(Graphics.Axis,1)
-            Graphics.Plot(i,k,1)=...
-                plot(Graphics.Axis(i,k),NaN(1,2),NaN(1,2));
-            Graphics.Plot(i,k,2)=...
-                plot(Graphics.Axis(i,k),NaN(1,2),NaN(1,2),...
-                'Color','r','LineWidth',1);
-            Graphics.Scatter(i,k,1)=...
-                scatter(Graphics.Axis(i,k),NaN(1,2),NaN(1,2),'s');
-            Graphics.Scatter(i,k,2)=...
-                scatter(Graphics.Axis(i,k),NaN(1,2),NaN(1,2),...
-                'MarkerFaceColor','r');
-            Graphics.Surf(i,k,1)=...
-                surf(Graphics.Axis(i,k),NaN(1,2),NaN(1,2),NaN(2,2),...
-                'EdgeColor','none');
-            Graphics.Surf(i,k,2)=...
-                surf(Graphics.Axis(i,k),NaN(1,2),NaN(1,2),NaN(2,2),...
-                'EdgeColor','none','FaceColor','interp','FaceAlpha','interp');
-            Graphics.Surf(i,k,3)=...
-                surf(Graphics.Axis(i,k),NaN(1,2),NaN(1,2),NaN(2,2),...
-                'EdgeColor','none','FaceColor','interp','FaceAlpha','interp');
-            Graphics.Patch(i,k,1)=...
-                fill(Graphics.Axis(i,k),NaN,NaN,'k',...
-                'FaceAlpha',0.1,'EdgeAlpha',1);
-            Graphics.Line(i,k,1)=...
-                line(Graphics.Axis(i,k),NaN(1,2),NaN(1,2),NaN(1,2),...
-                'LineWidth',1,'Visible','off');
-        end
-        set(Graphics.Axis(:),'Visible','off','XMinorTick','on',...
-            'YMinorTick','on','YTickLabel',[],...
-            'NextPlot','replacechildren',...
-            'GridLineStyle','none','View',[0,90],...
-            'Color',1*[1,1,1],'FontSize',8);
-        axis(Graphics.Axis(3,k),'tight')
-        set(Graphics.Axis(3,k),'XTick',[],'YTick',-1:0.5:1,...
-            'YLim',[-1,1],'YTickLabelMode','auto');
-        set(Graphics.Plot(1,k,2),'Color',[1,1,1]);
-    end
-else
-    set(Graphics.Plot(:),'XData',NaN,'YData',NaN);
-    set(Graphics.Scatter(:),'XData',NaN,'YData',NaN);
-    set(Graphics.Surf(:),...
-        'XData',NaN(1,2),'YData',NaN(1,2),'ZData',NaN(2,2));
-    set(Graphics.Patch(:),'XData',NaN,'YData',NaN);
-    set(Graphics.Line(:),...
-        'XData',NaN,'YData',NaN,'ZData',NaN);
-end
 end
