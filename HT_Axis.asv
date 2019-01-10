@@ -16,7 +16,6 @@ classdef HT_Axis
             obj.axis = axes(parent,'Box','on');
             set(obj.axis,'NextPlot','add');
             obj.count=size(state.graphs,1);
-            obj.graphs=gobjects(obj.count,1);
             for i = 1:obj.count
                 switch lower(state.graphs{i,1})
                     case 'plot'
@@ -26,7 +25,7 @@ classdef HT_Axis
                     case 'surf'
                         obj.graphs(i) = surf(obj.axis,[NaN,NaN],[NaN,NaN],[NaN,NaN;NaN,NaN]);
                     case 'patch'
-                        obj.graphs(i) = fill(obj.axis,NaN,NaN,[0,0,0]);
+                        obj.graphs(i) = fillobj.axis,NaN,NaN);
                     case 'line'
                         obj.graphs(i) = line(obj.axis);
                 end
@@ -35,7 +34,7 @@ classdef HT_Axis
                 end
             end
             for i =1:size(state.properties,1)
-                set(obj.axis,state.properties{i,1},state.properties{i,2});
+                set(obj.axis,state.properties{i,2}{j,1},state.properties{i,2}{j,2});
             end
             set(obj.axis,'NextPlot','replacechildren');
         end
