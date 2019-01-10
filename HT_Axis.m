@@ -9,24 +9,24 @@ classdef HT_Axis < axes
     end
     
     methods
-        function obj = HT_Axis(panel, state)
+        function obj = HT_Axis(parent, state)
             %UNTITLED Construct an instance of this class
             %   Detailed explanation goes here
-            obj = obj@axes(panel,'Box','on');
+            obj = obj@axes(parent,'Box','on');
             set(obj,'NextPlot','add');
             obj.count=size(state.graphs,1);
             for i = 1:obj.count
                 switch lower(state.graphs{i,1})
                     case 'plot'
-                        obj.graphs(i) = plot(axis);
+                        obj.graphs(i) = plot(obj);
                     case 'scatter'
-                        obj.graphs(i) = scatter(axis);
+                        obj.graphs(i) = scatter(obj);
                     case 'surf'
-                        obj.graphs(i) = surf(axis);
+                        obj.graphs(i) = surf(obj);
                     case 'patch'
-                        obj.graphs(i) = fill(axis);
+                        obj.graphs(i) = fill(obj);
                     case 'line'
-                        obj.graphs(i) = line(axis);
+                        obj.graphs(i) = line(obj);
                 end
                 for j=1:size(state.graphs{i,2},1)
                     set(obj.graphs(i),state.graphs{i,2}{j,1},state.graphs{i,2}{j,2});
