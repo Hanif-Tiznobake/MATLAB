@@ -4,9 +4,8 @@ classdef HT_Axis
     
     properties
         axis
-        count
         graphs
-        props
+        count
     end
     
     methods
