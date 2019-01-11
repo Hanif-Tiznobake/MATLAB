@@ -1,35 +1,33 @@
-classdef HT_Panel
+classdef HTPanel < HTComponent
     %UNTITLED Summary of this class goes here
     %   Detailed explanation goes here
     
     properties
-        panel
         components
-        count
     end
     
     methods
-        function obj = HT_Panel(parent, state)
+        function obj = HTPanel(parent, state)
             %UNTITLED Construct an instance of this class
             %   Detailed explanation goes here
-            obj.panel=uipanel(parent);
-            obj.count=size(state.components,1);
+            obj=obj@HTComponent(state);
+            obj.host=uipanel(parent);
             obj.components=gobjects(obj.count,1);
             for i = 1:obj.count
-                switch lower(state.components{i,1})
+                switch lower(obj.state{2,2}{i,1})
                     case 'dropdown'
-                        obj.components(i) = uidropdown(obj.panel);
+                        obj.components(i,1) = uidropdown(obj.host);
                     case 'listbox'
-                        obj.components(i) = uilistbox(obj.panel);
+                        obj.components(i,1) = uilistbox(obj.host);
                     case 'modify'
-                        obj.components(i) = uislider(obj.panel);
+                        obj.components(i,1) = uislider(obj.host);
                 end
-                for j=1:size(state.components{i,2},1)
-                    set(obj.components(i),state.components{i,2}{j,1},state.components{i,2}{j,2});
+                for j=1:size(obj.state{2,2}{i,2}{1,2},1)
+                    set(obj.components(i,1),obj.state{2,2}{i,2}{1,2}{j,1},obj.state{2,2}{i,2}{1,2}{j,2});
                 end
             end
-            for i =1:size(state.properties,1)
-                set(obj.panel,state.properties{i,1},state.properties{i,2});
+            for i =1:size(obj.state{1,2}{1,2},1)
+                set(obj.host,obj.state{1,2}{1,2}{i,1},obj.state{1,2}{1,2}{i,2});
             end            
         end
         
