@@ -23,6 +23,15 @@ classdef HTComponent < matlab.mixin.Heterogeneous
             end
         end
         
+        function value=GetProp(obj,prop)
+            for i = 1:size(obj.state{1,2},1)
+                if strcmp(obj.state{1,2}{i,1},prop)
+                    value=obj.state{1,2}{i,2};
+                    break
+                end
+            end
+        end
+        
     end
 end
 
