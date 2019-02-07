@@ -16,8 +16,9 @@ classdef HTTab < HTComponent
             obj.host(2,1) = axes(obj.host(1,1),'Box','on');
             set(obj.host(2,1),'NextPlot','add');
             obj.components=gobjects(obj.count,1);
+            temp=fieldnames(state);
             for i = 1:obj.count
-                switch lower(obj.state{2,2}{i,1})
+                switch lower(obj.state.components.(temp(i)).class)
                     case 'plot'
                         obj.components(i,1) = plot(obj.host(2,1),NaN,NaN);
                     case 'scatter'
@@ -29,12 +30,14 @@ classdef HTTab < HTComponent
                     case 'line'
                         obj.components(i,1) = line(obj.host(2,1));
                 end
-                for j=1:size(obj.state{2,2}{i,2}{1,2},1)
-                    set(obj.components(i,1),obj.state{2,2}{i,2}{1,2}{j,1},obj.state{2,2}{i,2}{1,2}{j,2});
+                tempi=fieldnames(obj.state.components.(temp(i)).properties);
+                for j=1:size(tempi,1)
+                    set(obj.components(i,1),tempi(j),obj.state.components.(temp(i)).properties.(tempi(j)));
                 end
             end
-            for i = 1:size(obj.state{1,2},1)
-                set(obj.host(2,1),obj.state{1,2}{2,2}{i,1},obj.state{1,2}{2,2}{i,2});
+            temp=fieldnames(state.properties);
+            for i = 1:size(temp,1)
+                set(obj.host(2,1),temp(i,obj.state{1,2}{2,2}{i,2});
             end
             set(obj.host(2,1),'NextPlot','replacechildren');
         end
